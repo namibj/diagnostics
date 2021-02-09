@@ -7,6 +7,8 @@ use crate::{DiagError, LoggingTuple};
 
 use timely::dataflow::operators::{Map, Filter, generic::Operator};
 
+use timely::progress::frontier::AntichainRef;
+
 use differential_dataflow::trace::TraceReader;
 use differential_dataflow::collection::AsCollection;
 use differential_dataflow::operators::{Join, reduce::Threshold, Consolidate, arrange::{Arrange, Arranged}};
@@ -119,7 +121,7 @@ pub fn listen_and_profile(
 
         let mut profile_trace = profile_trace;
 
-        profile_trace.distinguish_since(&[]);
+        profile_trace.distinguish_since(AntichainRef::new(&[]));
 
         let (mut cursor, storage) = profile_trace.cursor();
 
